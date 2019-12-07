@@ -4,19 +4,17 @@ const jwt = require('jsonwebtoken')
 const util = require('util')
 const verify = util.promisify(jwt.verify)
 const { SECRET } = require('../conf/constants')
-const { isExist } = require('../controller/UserController')
+const { isExist, register } = require('../controller/UserController')
 
 /**
  * 用户注册
  * @param userName 用户名
  * @param password 密码
  */
-router.get('/register', async (ctx, next) => {
-  ctx.body = {
-    code: 0,
-    msg: '注册',
-    data: {}
-  }
+router.post('/register', async (ctx, next) => {
+  const params = ctx.request.body
+  console.log(params)
+  ctx.body = await register(params)
 })
 
 /**

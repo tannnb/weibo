@@ -18,7 +18,8 @@ onerror(app)
 
 // 接口白名单
 const PathWrite = [
-  /^\/api\/user\/isExist/
+  /^\/api\/user\/isExist/,
+  /^\/api\/user\/register/,
 ]
 app.use(jwt({ secret: SECRET }).unless({ path: PathWrite }))
 
