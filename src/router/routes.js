@@ -50,6 +50,10 @@ const routes = [
     ]
   },
   {
+    path: '/login',
+    component: Loader('layout/home'),
+  },
+  {
     path: '*',
     component: Main,
     redirect: { path: '/home' }

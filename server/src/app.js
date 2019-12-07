@@ -11,24 +11,17 @@ const logger = require('koa-logger')
 const { REDIS_CONF } = require('./conf/db')
 const { SECRET } = require('./conf/constants')
 const index = require('./routes/index')
-const users = require('./routes/users')
+const userApiRouter = require('./routes/user')
 
 // error handler
 onerror(app)
 
-/*
-* path: [
-        /^\/api\/login/,
-        /^\/api\/register/,
-        /^((?!\/api).)*$/   // 设置除了私有接口外的其它资源，可以不需要认证访问
-    ]
-* */
+// 接口白名单
+const PathWrite = [
+  /^\/api\/user\/isExist/
+]
+app.use(jwt({ secret: SECRET }).unless({ path: PathWrite }))
 
-app.use(
-  jwt({ secret: SECRET }).unless({
-    path: [/^\/users\/login/]
-  }) // 自定义那些目录忽略
-)
 // middlewares
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
@@ -36,7 +29,6 @@ app.use(bodyparser({
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
-
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
@@ -66,7 +58,7 @@ app.use(session({
 
 // routes
 app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

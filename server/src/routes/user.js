@@ -1,12 +1,31 @@
 const router = require('koa-router')()
+router.prefix('/api/user')
 const jwt = require('jsonwebtoken')
-const { SECRET } = require('../conf/constants')
 const util = require('util')
 const verify = util.promisify(jwt.verify)
-router.prefix('/users')
+const { SECRET } = require('../conf/constants')
+const { isExist } = require('../controller/UserController')
 
-router.get('/', function (ctx, next) {
-  ctx.body = 'this is a users response!'
+/**
+ * 用户注册
+ * @param userName 用户名
+ * @param password 密码
+ */
+router.get('/register', async (ctx, next) => {
+  ctx.body = {
+    code: 0,
+    msg: '注册',
+    data: {}
+  }
+})
+
+/**
+ * 判断用户是否被注册
+ * @param userName 用户名
+ */
+router.post('/isExist', async (ctx, next) => {
+  const { userName } = ctx.request.body
+  ctx.body = await isExist(userName)
 })
 
 router.post('/login', async (ctx, next) => {
