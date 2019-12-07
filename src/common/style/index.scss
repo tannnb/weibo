@@ -1,0 +1,12 @@
+@import "reset";
+@import "variable";
+
+body, html {
+  width: 100%;
+  height: 100%;
+  line-height: 1;
+  overflow: hidden;
+  font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback';
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
