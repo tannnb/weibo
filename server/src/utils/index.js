@@ -1,4 +1,5 @@
-const { DEFAULT_PICTURE } = require('../conf/constants')
+const crypto = require('crypto')
+const { DEFAULT_PICTURE, CRYPTO_SECRET_KEY } = require('../conf/constants')
 
 /**
  * 用户默认头像设置
@@ -52,9 +53,31 @@ class ErrorModel extends BaseModel {
   }
 }
 
+/**
+ * md5加密
+ * @param content
+ * @returns {string}
+ * @private
+ */
+function _md5 (content) {
+  const md5 = crypto.createHash('md5')
+  return md5.update(content).digest('hex')
+}
+
+/**
+ * 加密方法
+ * @param content
+ * @returns {string}
+ */
+function doCrypto (content) {
+  const str = `password=${content}&key=${CRYPTO_SECRET_KEY}`
+  return _md5(str)
+}
+
 module.exports = {
   _formatUserPicture,
   formatUser,
   SuccessModel,
-  ErrorModel
+  ErrorModel,
+  doCrypto
 }

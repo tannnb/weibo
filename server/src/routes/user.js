@@ -1,10 +1,12 @@
 const router = require('koa-router')()
-router.prefix('/api/user')
 const jwt = require('jsonwebtoken')
 const util = require('util')
 const verify = util.promisify(jwt.verify)
 const { SECRET } = require('../conf/constants')
 const { isExist, register } = require('../controller/UserController')
+
+router.prefix('/api/user')
+
 
 /**
  * 用户注册

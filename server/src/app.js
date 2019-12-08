@@ -9,7 +9,7 @@ const redisStore = require('koa-redis')
 const jwt = require('koa-jwt')
 const logger = require('koa-logger')
 const { REDIS_CONF } = require('./conf/db')
-const { SECRET } = require('./conf/constants')
+const { SECRET, SESSION_KEY } = require('./conf/constants')
 const index = require('./routes/index')
 const userApiRouter = require('./routes/user')
 
@@ -19,7 +19,7 @@ onerror(app)
 // 接口白名单
 const PathWrite = [
   /^\/api\/user\/isExist/,
-  /^\/api\/user\/register/,
+  /^\/api\/user\/register/
 ]
 app.use(jwt({ secret: SECRET }).unless({ path: PathWrite }))
 
@@ -43,7 +43,7 @@ app.use(async (ctx, next) => {
 })
 
 // session配置
-app.keys = ['_tannnb_']
+app.keys = [SESSION_KEY]
 app.use(session({
   key: 'weibo.sid', // cookie name
   prefix: 'weibo.sess:', // redis key前缀

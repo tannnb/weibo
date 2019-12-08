@@ -1,5 +1,5 @@
 const { getUserInfo, createUser } = require('../services/UserServer')
-const { SuccessModel, ErrorModel } = require('../utils')
+const { SuccessModel, ErrorModel, doCrypto } = require('../utils')
 const {
   registerUserNameNotExistInfo,
   registerFailInfo,
@@ -33,7 +33,7 @@ async function register ({ userName, password, gender = 3, nickName = '' }) {
     return new ErrorModel(registerUserNameExistInfo)
   }
   try {
-    await createUser({ userName, password, gender, nickName })
+    await createUser({ userName, password: doCrypto(password), gender, nickName })
     return new SuccessModel()
   } catch (ex) {
     console.log(ex.message, ex.stack)
