@@ -12,6 +12,7 @@
     "ajv-errors": "^1.0.1",
     "babel-eslint": "^10.0.3",
     "cross-env": "^6.0.3",
+    "dayjs": "^1.8.17",
     "debug": "^4.1.1",
     "ejs": "^3.0.1",
     "eslint": "^6.7.2",

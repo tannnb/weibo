@@ -6,12 +6,15 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
-const jwt = require('koa-jwt')
 const logger = require('koa-logger')
+const jwt = require('koa-jwt')
+const DayJS = require('dayjs')
 const { REDIS_CONF } = require('./conf/db')
 const { SECRET, SESSION_KEY } = require('./conf/constants')
+const { tokenExpireInfo, tokenFailInfo } = require('./conf/ErrorInfo')
 const index = require('./routes/index')
 const userApiRouter = require('./routes/user')
+const { ErrorModel } = require('./utils')
 
 // error handler
 onerror(app)
@@ -20,9 +23,23 @@ onerror(app)
 const PathWrite = [
   /^\/api\/user\/isExist/,
   /^\/api\/user\/register/,
-  /^\/api\/user\/login/,
-  /^\/api\/user\/getUerInfo/,
+  /^\/api\/user\/login/
 ]
+
+// 校验token以及是否过期
+app.use(async (ctx, next) => {
+  return next().catch((err) => {
+    if (err.status === 401) {
+      let nowTime = new Date().getTime()
+      let expiredAt = DayJS(err.originalError.expiredAt).valueOf()
+      let message = tokenFailInfo
+      if ((nowTime - expiredAt) > 0) {
+        message = tokenExpireInfo
+      }
+      ctx.body = new ErrorModel(401, message)
+    }
+  })
+})
 app.use(jwt({ secret: SECRET }).unless({ path: PathWrite }))
 
 // middlewares
@@ -65,7 +82,7 @@ app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx)
+  console.error('错误信息', err)
 })
 
 module.exports = app

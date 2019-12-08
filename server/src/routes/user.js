@@ -1,8 +1,14 @@
 const router = require('koa-router')()
+const util = require('util')
+const jwt = require('jsonwebtoken')
+const verify = util.promisify(jwt.verify)
 const { isExist, register, login } = require('../controller/UserController')
 const { useValidator } = require('../utils/validator')
 const { genValidator } = require('../middlewares/validator')
-const { loginCheck } = require('../middlewares/loginCheck')
+const { tokenFailInfo } = require('../conf/ErrorInfo')
+const { SECRET } = require('../conf/constants')
+const { ErrorModel, SuccessModel } = require('../utils')
+
 router.prefix('/api/user')
 
 /**
@@ -34,8 +40,23 @@ router.post('/login', async (ctx, next) => {
   ctx.body = await login(ctx, userName, password)
 })
 
-router.get('/getUerInfo', loginCheck(), async (ctx, next) => {
-  ctx.body = { code: 200 }
+/**
+ * <获取用户信息>
+ * @param authorization
+ */
+router.get('/getUerInfo', async (ctx, next) => {
+  const token = ctx.header.authorization
+  if (!token) {
+    ctx.body = new ErrorModel(-1, tokenFailInfo)
+    return
+  }
+  try {
+    let payload = await verify(token.split(' ')[1], SECRET)
+    let { iat, exp, ...data } = payload
+    ctx.body = new SuccessModel(data)
+  } catch (e) {
+    ctx.body = new ErrorModel(401, tokenFailInfo)
+  }
 })
 
 module.exports = router
