@@ -1,12 +1,16 @@
+const jwt = require('jsonwebtoken')
+const { SECRET } = require('../conf/constants')
 const { getUserInfo, createUser } = require('../services/UserServer')
 const { SuccessModel, ErrorModel, doCrypto } = require('../utils')
 const {
   registerUserNameNotExistInfo,
   registerFailInfo,
+  loginFailInfo,
   registerUserNameExistInfo
 } = require('../conf/ErrorInfo')
 
 /**
+ * <检查用户是否被注册>
  * @param userName 用户名
  * @returns {Promise<ErrorModel|*|SuccessModel>}
  */
@@ -21,6 +25,7 @@ async function isExist (userName) {
 }
 
 /**
+ * <用户注册>
  * @param userName 用户名
  * @param password 密码
  * @param gender 性别(1男 2女 3保密)
@@ -41,7 +46,28 @@ async function register ({ userName, password, gender = 3, nickName = '' }) {
   }
 }
 
+/**
+ * 用户登录
+ * @param ctx 上下文
+ * @param userName 用户名
+ * @param password 密码
+ * @returns {Promise<ErrorModel|*|SuccessModel>}
+ */
+async function login (ctx, userName, password) {
+  const userInfo = await getUserInfo(userName, doCrypto(password))
+  if (!userInfo) {
+    // 登录失败
+    return new ErrorModel(loginFailInfo)
+  }
+  let token
+  if (userInfo) {
+    token = jwt.sign(userInfo, SECRET, { expiresIn: '1h' })
+  }
+  return new SuccessModel(token, '登录成功')
+}
+
 module.exports = {
   isExist,
-  register
+  register,
+  login
 }
