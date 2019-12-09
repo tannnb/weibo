@@ -18,6 +18,11 @@ const User = Seq.define('user', {
     allowNull: false,
     comment: '昵称'
   },
+  description: {
+    type: STRING,
+    defaultValue: '这个人很懒，什么都没留下...',
+    comment: '简介'
+  },
   gender: {
     type: DECIMAL,
     allowNull: false,
@@ -31,6 +36,22 @@ const User = Seq.define('user', {
   city: {
     type: STRING,
     comment: '城市'
+  },
+  realName: {
+    type: STRING,
+    comment: '真实姓名'
+  },
+  BornIn: {
+    type: STRING,
+    comment: '出生年月'
+  },
+  phone: {
+    type: STRING,
+    comment: '手机号'
+  },
+  email: {
+    type: STRING,
+    comment: '邮箱'
   }
 })
 
