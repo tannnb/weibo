@@ -8,7 +8,6 @@ const { genValidator } = require('../middlewares/validator')
 const { tokenFailInfo } = require('../conf/ErrorInfo')
 const { SECRET } = require('../conf/constants')
 const { ErrorModel, SuccessModel } = require('../utils')
-
 router.prefix('/api/user')
 
 /**

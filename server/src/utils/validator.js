@@ -1,7 +1,7 @@
 const Ajv = require('ajv')
 const ajv = new Ajv({
-  allErrors: true // 输出所有错误
-  // jsonPointers: true
+  allErrors: true, // 输出所有错误
+  jsonPointers: true
 })
 require('ajv-errors')(ajv /*, {singleError: true} */)
 

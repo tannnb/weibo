@@ -8,6 +8,8 @@
 import Vue from 'vue'
 import { Button, Swipe, SwipeItem, NoticeBar, Icon } from 'vant'
 
+import io from 'socket.io-client'
+
 Vue.use(Button)
 Vue.use(Swipe)
 Vue.use(SwipeItem)
@@ -25,11 +27,14 @@ export default {
       betAmount: null
     }
   },
-
-  mounted () {
-
+  created () {
+    this.socket = io('http://127.0.0.1:3001/news')
   },
-
+  mounted () {
+    this.socket.on('open', (msg) => {
+      console.log(msg)
+    })
+  },
   methods: {
     handleClick () {
       this.$router.push('/test')

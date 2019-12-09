@@ -7,6 +7,8 @@ const bodyparser = require('koa-bodyparser')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const logger = require('koa-logger')
+const server = require('http').createServer(app.callback())
+const io = require('socket.io')(server)
 const jwt = require('koa-jwt')
 const DayJS = require('dayjs')
 const { REDIS_CONF } = require('./conf/db')
@@ -15,6 +17,7 @@ const { tokenExpireInfo, tokenFailInfo } = require('./conf/ErrorInfo')
 const index = require('./routes/index')
 const userApiRouter = require('./routes/user')
 const { ErrorModel } = require('./utils')
+const { connectSocket } = require('./io')
 
 // error handler
 onerror(app)
@@ -79,6 +82,10 @@ app.use(session({
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
+
+// 连接socket
+connectSocket(io)
+server.listen(3001)
 
 // error-handling
 app.on('error', (err, ctx) => {
