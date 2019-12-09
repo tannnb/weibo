@@ -1,12 +1,13 @@
 const Koa = require('koa')
 const app = new Koa()
-const views = require('koa-views')
+const path = require('path')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const logger = require('koa-logger')
+const koaStatic = require('koa-static')
 const server = require('http').createServer(app.callback())
 const io = require('socket.io')(server)
 const jwt = require('koa-jwt')
@@ -16,6 +17,7 @@ const { SECRET, SESSION_KEY } = require('./conf/constants')
 const { tokenExpireInfo, tokenFailInfo } = require('./conf/ErrorInfo')
 const index = require('./routes/index')
 const userApiRouter = require('./routes/user')
+const utilsApiRouter = require('./routes/utils')
 const { ErrorModel } = require('./utils')
 const { connectSocket } = require('./io')
 
@@ -26,7 +28,9 @@ onerror(app)
 const PathWrite = [
   /^\/api\/user\/isExist/,
   /^\/api\/user\/register/,
-  /^\/api\/user\/login/
+  /^\/api\/user\/login/,
+  /^\/api\/utils\/upload/,
+  /^\//
 ]
 
 // 校验token以及是否过期
@@ -43,7 +47,7 @@ app.use(async (ctx, next) => {
     }
   })
 })
-app.use(jwt({ secret: SECRET }).unless({ path: PathWrite }))
+/* app.use(jwt({ secret: SECRET }).unless({ path: PathWrite })) */
 
 // middlewares
 app.use(bodyparser({
@@ -51,10 +55,8 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
-app.use(views(__dirname + '/views', {
-  extension: 'ejs'
-}))
+app.use(koaStatic(path.join(__dirname, 'public')))
+app.use(koaStatic(path.join(__dirname, '..', 'uploadFolders')))
 
 // logger
 app.use(async (ctx, next) => {
@@ -80,6 +82,7 @@ app.use(session({
 }))
 
 // routes
+app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
 app.use(index.routes(), index.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 

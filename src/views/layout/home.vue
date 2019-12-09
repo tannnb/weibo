@@ -1,6 +1,7 @@
 <template>
     <div class="home-wrapper">
       home
+      <button @click="handleLogin">进入登录</button>
     </div>
 </template>
 
@@ -41,6 +42,9 @@ export default {
     },
     handelAlert () {
 
+    },
+    handleLogin () {
+      this.$router.push('/login')
     }
   }
 }

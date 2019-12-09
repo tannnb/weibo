@@ -51,7 +51,7 @@ const routes = [
   },
   {
     path: '/login',
-    component: Loader('layout/home'),
+    component: Loader('login/index'),
   },
   {
     path: '*',

@@ -10,6 +10,7 @@ Seq.authenticate().then(res => {
   console.log('no')
 })
 
-Seq.sync({ force: true }).then(() => {
+// { force: true }
+Seq.sync().then(() => {
   process.exit()
 })
