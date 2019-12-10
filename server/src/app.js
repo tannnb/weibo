@@ -29,10 +29,9 @@ const PathWrite = [
   /^\/api\/user\/isExist/,
   /^\/api\/user\/register/,
   /^\/api\/user\/login/,
-  /^\/api\/utils\/upload/,
   /^\//
 ]
-
+//   /^\/api\/utils\/upload/,
 // 校验token以及是否过期
 app.use(async (ctx, next) => {
   return next().catch((err) => {
@@ -47,7 +46,7 @@ app.use(async (ctx, next) => {
     }
   })
 })
-/* app.use(jwt({ secret: SECRET }).unless({ path: PathWrite })) */
+app.use(jwt({ secret: SECRET }).unless({ path: PathWrite }))
 
 // middlewares
 app.use(bodyparser({

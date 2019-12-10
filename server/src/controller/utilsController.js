@@ -18,17 +18,14 @@ const DIST_FOLDER_PATH = path.join(__dirname, '..', '..', 'uploadFolders')
  * @param filePath 文件路径
  * @returns {Promise<ErrorModel|*|SuccessModel>}
  */
-async function saveFile ({ name, type, size, filePath }) {
+async function saveFile ({ size, path, filename, mimetype  }) {
+  console.log('filename:',filename)
   if (size > MIN_SIZE) {
-    await fsExtra.remove(filePath)
+    await fsExtra.remove(path)
     return new ErrorModel(uploadFileSizeFailInfo)
   }
-  // 移动文件
-  const fileName = `${Date.now()}.${name}` // 防止重名
-  const distFilePath = path.join(DIST_FOLDER_PATH, fileName)
-  await fsExtra.move(filePath, distFilePath)
   return new SuccessModel({
-    url: '/' + fileName
+    url:  filename
   })
 }
 
