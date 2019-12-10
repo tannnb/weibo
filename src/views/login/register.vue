@@ -23,15 +23,14 @@
             placeholder="请输入密码"
           />
         </van-cell-group>
-        <div @click="handleRegister">立即注册</div>
         <van-button type="primary" size="large" @click="handleLogin">注册</van-button>
       </van-col>
     </van-row>
   </div>
-</template>
+</template>s
 
 <script>
-import { isExist, isLogin } from '@/api/user'
+import { isExist, isRegister } from '@/api/user'
 import { debounce } from '@/utils/utils'
 import { ERROR_NO, SUCCESS_OK } from '@/conf/statusCode'
 export default {
@@ -67,18 +66,18 @@ export default {
       }
     },
     handleLogin () {
-      console.log('asd')
       if (!this.username || !this.password) {
-        this.$dialog.alert({
-          message: '用户名或密码不能为空!'
-        })
+        this.$toast('用户名或密码不能为空')
         return
       }
-      this._isLogin(this.username, this.password)
+      this._isRegister(this.username, this.password)
     },
-    _isLogin (username, password) {
-      isLogin(username, password).then(res => {
-        console.log('res', res)
+    _isRegister (username, password) {
+      isRegister(username, password).then(res => {
+        const { code, message } = res
+        if (code === ERROR_NO) {
+          this.$toast(message)
+        }
       }).catch(() => {
 
       })
@@ -96,9 +95,6 @@ export default {
       }).catch(() => {
         this.checked = this.errorMessage = ''
       })
-    },
-    handleRegister () {
-      this.$router.replace('/register')
     }
   },
   beforeDestroy () {}
@@ -106,9 +102,9 @@ export default {
 </script>
 
 <style lang="scss">
-.loginWrapper {
-  .van-field__right-icon {
-    color: #07c160;
+  .loginWrapper {
+    .van-field__right-icon {
+      color: #07c160;
+    }
   }
-}
 </style>

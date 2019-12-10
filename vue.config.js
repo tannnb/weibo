@@ -70,5 +70,13 @@ module.exports = {
     port: 8088,
     https: false,
     hotOnly: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        ws: false, // 是否启用websockets
+        secure: false, // 使用的是http协议则设置为false，https协议则设置为true
+        changOrigin: true // 开启代理
+      }
+    }
   }
 }

@@ -3,9 +3,9 @@ const { SECRET } = require('../conf/constants')
 const { getUserInfo, createUser } = require('../services/UserServer')
 const { SuccessModel, ErrorModel, doCrypto } = require('../utils')
 const {
-  registerUserNameNotExistInfo,
   registerFailInfo,
   loginFailInfo,
+  registerUserNameNotExistInfo,
   registerUserNameExistInfo
 } = require('../conf/ErrorInfo')
 
@@ -18,7 +18,7 @@ async function isExist (userName) {
   const userInfo = await getUserInfo(userName)
   if (userInfo) {
     // 用户已存在
-    return new SuccessModel(userInfo)
+    return new SuccessModel(registerUserNameExistInfo)
   } else {
     return new ErrorModel(registerUserNameNotExistInfo)
   }

@@ -51,7 +51,11 @@ const routes = [
   },
   {
     path: '/login',
-    component: Loader('login/index'),
+    component: Loader('login/index')
+  },
+  {
+    path: '/register',
+    component: Loader('login/register')
   },
   {
     path: '*',

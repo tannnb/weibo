@@ -15,7 +15,7 @@ axios.interceptors.request.use(
     if (getToken()) {
       config.headers['Authorization'] = getToken()
     }
-    Toast.loading({ message: '加载中...' })
+   // Toast.loading({ message: '加载中...' })
     return config
   },
   error => {
@@ -25,10 +25,10 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   response => {
-    Toast.clear()
+   // Toast.clear()
     return response.data
   }, error => {
-    Toast.clear()
+   // Toast.clear()
     if (error.response !== undefined) {
       switch (error.response.status) {
         case 400:

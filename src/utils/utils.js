@@ -20,7 +20,6 @@ export const _formatMoney = (money) => {
   return null
 }
 
-
 // vue-router 页面转场动画 js 工具
 export function initRouter (Router) {
   // 初始化 key
@@ -62,5 +61,17 @@ export function initRouter (Router) {
   let oldBack = Router.prototype.back
   Router.prototype.back = function (...args) {
     oldBack.apply(this, args)
+  }
+}
+
+export function debounce (func, delay) {
+  let timer
+  return function (...args) {
+    if (timer) {
+      clearInterval(timer)
+    }
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
   }
 }

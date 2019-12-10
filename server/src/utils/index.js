@@ -44,6 +44,10 @@ class BaseModel {
 }
 class SuccessModel extends BaseModel {
   constructor (data = {}, message = '操作成功') {
+    if (typeof data === 'string') {
+      message = data
+      data = {}
+    }
     super({ code: 0, data, message })
   }
 }

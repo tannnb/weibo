@@ -6,6 +6,7 @@ import {
   CellGroup,
   Row,
   Col,
+  Dialog
 } from 'vant'
 
 export default {
@@ -17,5 +18,6 @@ export default {
     Vue.use(Field)
     Vue.use(Row)
     Vue.use(Col)
+    Vue.use(Dialog)
   }
 }
