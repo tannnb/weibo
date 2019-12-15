@@ -58,4 +58,12 @@ router.get('/getUerInfo', async (ctx, next) => {
   }
 })
 
+router.patch('/changeInfo', genValidator(useValidator), async (ctx, next) => {
+  const { nickName, city, picture } = ctx.request.body
+  console.log(nickName, city, picture)
+  ctx.body = {
+    code: 0
+  }
+})
+
 module.exports = router
