@@ -2,7 +2,7 @@ const router = require('koa-router')()
 const util = require('util')
 const jwt = require('jsonwebtoken')
 const verify = util.promisify(jwt.verify)
-const { isExist, register, login } = require('../controller/UserController')
+const { isExist, register, login, changeInfo ,changePassword } = require('../controller/UserController')
 const { useValidator } = require('../utils/validator')
 const { genValidator } = require('../middlewares/validator')
 const { tokenFailInfo } = require('../conf/ErrorInfo')
@@ -58,12 +58,15 @@ router.get('/getUerInfo', async (ctx, next) => {
   }
 })
 
+/**
+ * <更新用户信息>
+ */
 router.patch('/changeInfo', genValidator(useValidator), async (ctx, next) => {
-  const { nickName, city, picture } = ctx.request.body
-  console.log(nickName, city, picture)
-  ctx.body = {
-    code: 0
-  }
+  ctx.body = await changeInfo(ctx, ctx.request.body)
+})
+
+router.patch('/changePassword', genValidator(useValidator), async (ctx, next) => {
+  ctx.body = await changePassword(ctx, ctx.request.body)
 })
 
 module.exports = router

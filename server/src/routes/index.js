@@ -35,9 +35,9 @@ router.get('/getLn', async (ctx, next) => {
   let resultArr = []
   paths.map(path => {
     let item = path.polyline.split(';')
-    for (let i=0;i<item.length;i++) {
+    for (let i = 0; i < item.length; i++) {
       let iValue = item[i].split(',')
-      resultArr.push([Number(iValue[1]),Number(iValue[0])])
+      resultArr.push([Number(iValue[1]), Number(iValue[0])])
     }
   })
 
@@ -46,8 +46,6 @@ router.get('/getLn', async (ctx, next) => {
     msg: 'ok',
     data: resultArr
   }
-
 })
 
 module.exports = router
-

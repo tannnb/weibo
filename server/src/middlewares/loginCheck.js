@@ -25,6 +25,22 @@ function loginCheck (ctx, next) {
   }
   return validator
 }
+
+async function getToken (ctx, next) {
+  const token = ctx.header.authorization
+  if (!token) {
+    ctx.body = new ErrorModel(-1, '权限验证失败')
+    return
+  }
+  try {
+    let result = await verify(token.split(' ')[1], SECRET)
+    return result
+  } catch (e) {
+    ctx.body = new ErrorModel(-1, '登录已过期,请重新登录!')
+  }
+}
+
 module.exports = {
-  loginCheck
+  loginCheck,
+  getToken
 }

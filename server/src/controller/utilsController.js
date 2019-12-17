@@ -18,14 +18,14 @@ const DIST_FOLDER_PATH = path.join(__dirname, '..', '..', 'uploadFolders')
  * @param filePath 文件路径
  * @returns {Promise<ErrorModel|*|SuccessModel>}
  */
-async function saveFile ({ size, path, filename, mimetype  }) {
-  console.log('filename:',filename)
+async function saveFile ({ size, path, filename, mimetype }) {
+  console.log('filename:', filename)
   if (size > MIN_SIZE) {
     await fsExtra.remove(path)
     return new ErrorModel(uploadFileSizeFailInfo)
   }
   return new SuccessModel({
-    url:  filename
+    url: filename
   })
 }
 

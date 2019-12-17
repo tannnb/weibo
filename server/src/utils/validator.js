@@ -24,6 +24,66 @@ const SCHEMA = {
       errorMessage: {
         minLength: '密码不少于3个字符'
       }
+    },
+    nickName: {
+      type: 'string',
+      maxLength: 255,
+      minLength: 2,
+      errorMessage: {
+        type: '昵称为字符'
+      }
+    },
+    city: {
+      type: 'string',
+      maxLength: 255,
+      minLength: 2,
+      errorMessage: {
+        type: '城市名称格式有误'
+      }
+    },
+    description: {
+      type: 'string',
+      maxLength: 255,
+      minLength: 1,
+      errorMessage: {
+        maxLength: '简介最多可输入250个字符'
+      }
+    },
+    gender: {
+      type: ['number', 'string'],
+      maxLength: 1,
+      errorMessage: {
+        maxLength: '请选择正确性别'
+      }
+    },
+    realName: {
+      type: 'string',
+      maxLength: 30,
+      minLength: 2,
+      errorMessage: {
+        type: '请输入真实姓名'
+      }
+    },
+    BornIn: {
+      type: 'string',
+      maxLength: 30,
+      minLength: 2,
+      errorMessage: {
+        type: '请输入正确出生日期'
+      }
+    },
+    phone: {
+      type: ['number', 'string'],
+      maxLength: 11,
+      errorMessage: {
+        maxLength: '手机号格式有误'
+      }
+    },
+    email: {
+      type: 'string',
+      errorMessage: {
+        type: '请输入邮箱'
+      }
     }
   }
 }

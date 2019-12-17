@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../conf/constants')
-const { getUserInfo, createUser, updateUser } = require('../services/UserServer')
+const { getUserInfo, createUser, updateUser,updatePassword } = require('../services/UserServer')
 const { SuccessModel, ErrorModel, doCrypto } = require('../utils')
-const util = require('util')
-const verify = util.promisify(jwt.verify)
+const { getToken } = require('../middlewares/loginCheck')
 const {
   registerFailInfo,
   loginFailInfo,
@@ -65,36 +64,34 @@ async function login (ctx, userName, password) {
   if (userInfo) {
     token = jwt.sign(userInfo, SECRET, { expiresIn: '1h' })
   }
-  return new SuccessModel(token, '登录成功')
+  return new SuccessModel({ token }, '登录成功')
 }
 
 /**
  * 修改个人信息
  * @param ctx 上下文
- * @param nickName 名称
- * @param city 城市
- * @param picture 头像
+ * @param params 参数  nickName, city, picture,.....
  * @returns {Promise<void>}
  */
-async function changeInfo (ctx, { nickName, city, picture }) {
-  const token = ctx.header.authorization
-  let payload = await verify(token.split(' ')[1], SECRET)
-  const result = await updateUser({
-    newNickName: nickName,
-    newCity: city,
-    newPicture: picture
-  }, { userName })
+async function changeInfo (ctx, params) {
+  let { userName } = await getToken(ctx)
+  const result = await updateUser(params, { userName })
   if (result) {
     return new SuccessModel('修改成功')
   } else {
     return new ErrorModel('修改失败')
   }
-  console.log('payload', payload)
+}
+
+async function changePassword (ctx, params) {
+  let { userName } = await getToken(ctx)
+  await updatePassword(params, userName)
 }
 
 module.exports = {
   isExist,
   register,
   login,
-  changeInfo
+  changeInfo,
+  changePassword
 }

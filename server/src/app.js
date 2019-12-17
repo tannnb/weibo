@@ -37,6 +37,7 @@ app.use(async (ctx, next) => {
   return next().catch((err) => {
     if (err.status === 401) {
       let nowTime = new Date().getTime()
+      console.log(err)
       let expiredAt = DayJS(err.originalError.expiredAt).valueOf()
       let message = tokenFailInfo
       if ((nowTime - expiredAt) > 0) {

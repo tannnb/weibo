@@ -46,25 +46,18 @@ async function createUser ({ userName, password, gender = 3, nickName }) {
 
 /**
  * 更新用户信息
- * @param {Object} 要修改的内容 newPassword, newNickName, newPicture, newCity
+ * @param {Object} 要修改的内容
  * @param {Object} 查询条件  userName, password
  */
-async function updateUser ({ newPassword, newNickName, newPicture, newCity }, { userName, password }) {
-  // 凭借修改内容
+async function updateUser (params, { userName, password }) {
+  // 拼接修改内容
   const updateDate = {}
-  if (newPassword) {
-    updateDate.password = newPassword
+  for (let attr in params) {
+    if (attr && attr.length !== 0) {
+      updateDate[attr] = params[attr]
+    }
   }
-  if (newNickName) {
-    updateDate.nickName = newNickName
-  }
-  if (newPicture) {
-    updateDate.picture = newPicture
-  }
-  if (newCity) {
-    updateDate.city = newCity
-  }
-  // 凭借查询条件
+  // 拼接查询条件
   const whereData = {
     userName
   }
@@ -72,15 +65,20 @@ async function updateUser ({ newPassword, newNickName, newPicture, newCity }, { 
     whereData.password = password
   }
 
-  // 修改
+  // 修改用户信息
   const result = await User.update(updateDate, {
     where: whereData
   })
   return result[0] > 0
 }
 
+async function updatePassword (params, { userName }) {
+
+}
+
 module.exports = {
   getUserInfo,
   createUser,
-  updateUser
+  updateUser,
+  updatePassword
 }
