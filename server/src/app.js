@@ -20,6 +20,7 @@ const userApiRouter = require('./routes/user')
 const utilsApiRouter = require('./routes/utils')
 const { ErrorModel } = require('./utils')
 const { connectSocket } = require('./io')
+const { loginCheck } = require('./middlewares/loginCheck')
 
 // error handler
 onerror(app)
@@ -31,9 +32,11 @@ const PathWrite = [
   /^\/api\/user\/login/,
   /^\//
 ]
+
+
 //   /^\/api\/utils\/upload/,
 // 校验token以及是否过期
-app.use(async (ctx, next) => {
+/* app.use(async (ctx, next) => {
   return next().catch((err) => {
     if (err.status === 401) {
       let nowTime = new Date().getTime()
@@ -46,8 +49,8 @@ app.use(async (ctx, next) => {
       ctx.body = new ErrorModel(401, message)
     }
   })
-})
-app.use(jwt({ secret: SECRET }).unless({ path: PathWrite }))
+}) */
+// app.use(jwt({ secret: SECRET }).unless({ path: PathWrite }))
 
 // middlewares
 app.use(bodyparser({
@@ -69,8 +72,8 @@ app.use(async (ctx, next) => {
 // session配置
 app.keys = [SESSION_KEY]
 app.use(session({
-  key: 'weibo.sid', // cookie name
-  prefix: 'weibo.sess:', // redis key前缀
+  key: 'token', // cookie name
+  prefix: 'token:', // redis key前缀
   cookie: {
     path: '/',
     httpOnly: true,
@@ -80,6 +83,8 @@ app.use(session({
     all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
   })
 }))
+
+app.use(loginCheck)
 
 // routes
 app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())

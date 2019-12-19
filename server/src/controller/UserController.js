@@ -1,13 +1,16 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../conf/constants')
-const { getUserInfo, createUser, updateUser,updatePassword } = require('../services/UserServer')
+const { getUserInfo, createUser, updateUser, updatePassword } = require('../services/UserServer')
 const { SuccessModel, ErrorModel, doCrypto } = require('../utils')
 const { getToken } = require('../middlewares/loginCheck')
 const {
   registerFailInfo,
   loginFailInfo,
   registerUserNameNotExistInfo,
-  registerUserNameExistInfo
+  registerUserNameExistInfo,
+  changePasswordFailInfo,
+  changePasswordInfo,
+  logoutInfo
 } = require('../conf/ErrorInfo')
 
 /**
@@ -64,6 +67,7 @@ async function login (ctx, userName, password) {
   if (userInfo) {
     token = jwt.sign(userInfo, SECRET, { expiresIn: '1h' })
   }
+  ctx.session.token = token
   return new SuccessModel({ token }, '登录成功')
 }
 
@@ -83,9 +87,31 @@ async function changeInfo (ctx, params) {
   }
 }
 
+/**
+ * 修改密码
+ * @param ctx 上下文
+ * @param params 新旧密码
+ * @returns {Promise<ErrorModel|*>}
+ */
 async function changePassword (ctx, params) {
   let { userName } = await getToken(ctx)
-  await updatePassword(params, userName)
+  const { password, newPassword } = params
+  const result = await updatePassword(userName, password, newPassword)
+  if (result) {
+    return new SuccessModel(changePasswordInfo)
+  } else {
+    return new ErrorModel(changePasswordFailInfo)
+  }
+}
+
+/**
+ * 退出登录
+ * @param ctx 上下文
+ * @returns {Promise<*>}
+ */
+async function logout (ctx) {
+  // 清楚token
+  return SuccessModel(logoutInfo)
 }
 
 module.exports = {
@@ -93,5 +119,6 @@ module.exports = {
   register,
   login,
   changeInfo,
-  changePassword
+  changePassword,
+  logout
 }

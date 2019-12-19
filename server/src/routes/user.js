@@ -2,7 +2,7 @@ const router = require('koa-router')()
 const util = require('util')
 const jwt = require('jsonwebtoken')
 const verify = util.promisify(jwt.verify)
-const { isExist, register, login, changeInfo ,changePassword } = require('../controller/UserController')
+const { isExist, register, login, changeInfo, changePassword, logout } = require('../controller/UserController')
 const { useValidator } = require('../utils/validator')
 const { genValidator } = require('../middlewares/validator')
 const { tokenFailInfo } = require('../conf/ErrorInfo')
@@ -38,7 +38,6 @@ router.post('/login', async (ctx, next) => {
   const { userName, password } = ctx.request.body
   ctx.body = await login(ctx, userName, password)
 })
-
 /**
  * <获取用户信息>
  * @param authorization
@@ -65,8 +64,26 @@ router.patch('/changeInfo', genValidator(useValidator), async (ctx, next) => {
   ctx.body = await changeInfo(ctx, ctx.request.body)
 })
 
+/**
+ * <修改密码>
+ */
 router.patch('/changePassword', genValidator(useValidator), async (ctx, next) => {
   ctx.body = await changePassword(ctx, ctx.request.body)
 })
+
+/**
+ * <退出登录>
+ */
+router.post('/logout', async (ctx, next) => {
+  ctx.body = await logout(ctx)
+})
+
+router.get('/test', async (ctx, next) => {
+  console.log('session',ctx.session.token)
+  ctx.body = {
+    code:0
+  }
+})
+
 
 module.exports = router

@@ -1,5 +1,5 @@
 const { User } = require('../db/model/index')
-const { formatUser } = require('../utils')
+const { formatUser, doCrypto } = require('../utils')
 /**
  * 获取用户信息
  * @param userName 用户名
@@ -72,8 +72,26 @@ async function updateUser (params, { userName, password }) {
   return result[0] > 0
 }
 
-async function updatePassword (params, { userName }) {
-
+/**
+ * 更新用户密码
+ * @param userName 用户名
+ * @param password 旧密码
+ * @param newPassword 新密码
+ * @returns {Promise<void>}
+ */
+async function updatePassword (userName, password, newPassword) {
+  const updateDate = {
+    password: doCrypto(newPassword)
+  }
+  // 查询条件
+  const whereData = {
+    userName,
+    password: doCrypto(password)
+  }
+  const result = await User.update(updateDate, {
+    where: whereData
+  })
+  return result[0] > 0
 }
 
 module.exports = {

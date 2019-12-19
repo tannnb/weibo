@@ -9,9 +9,15 @@ const { ErrorModel } = require('../utils')
  * @param next
  * @returns {Promise<void>}
  */
-function loginCheck (ctx, next) {
-  async function validator (ctx, next) {
-    const token = ctx.header.authorization
+async function loginCheck (ctx, next) {
+  if (ctx.session) {
+    console.log('111', ctx.session.token)
+  }
+  await next()
+  /* return function validator (ctx, next) {
+    console.log('111111')
+    next()
+    /!*const token = ctx.header.authorization
     if (!token) {
       ctx.body = new ErrorModel(-1, '权限验证失败')
       return
@@ -21,9 +27,8 @@ function loginCheck (ctx, next) {
       await next()
     } catch (e) {
       ctx.body = new ErrorModel(-1, '登录已过期,请重新登录!')
-    }
-  }
-  return validator
+    }*!/
+  } */
 }
 
 async function getToken (ctx, next) {
