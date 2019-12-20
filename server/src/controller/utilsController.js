@@ -1,14 +1,9 @@
 const fsExtra = require('fs-extra')
-const path = require('path')
 const { SuccessModel, ErrorModel } = require('../utils')
-const {
-  uploadFileSizeFailInfo
-} = require('../conf/ErrorInfo')
+const { uploadFileSizeFailInfo } = require('../conf/ErrorInfo')
 
 // 文件最大体积1M
 const MIN_SIZE = 1024 * 1024 * 1024
-// 储存路径
-const DIST_FOLDER_PATH = path.join(__dirname, '..', '..', 'uploadFolders')
 
 /**
  * <图片上传>
@@ -19,7 +14,6 @@ const DIST_FOLDER_PATH = path.join(__dirname, '..', '..', 'uploadFolders')
  * @returns {Promise<ErrorModel|*|SuccessModel>}
  */
 async function saveFile ({ size, path, filename, mimetype }) {
-  console.log('filename:', filename)
   if (size > MIN_SIZE) {
     await fsExtra.remove(path)
     return new ErrorModel(uploadFileSizeFailInfo)

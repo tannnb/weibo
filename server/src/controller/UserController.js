@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { SECRET } = require('../conf/constants')
+const { SECRET,EXPIRES_IN } = require('../conf/constants')
 const { getUserInfo, createUser, updateUser, updatePassword } = require('../services/UserServer')
 const { SuccessModel, ErrorModel, doCrypto } = require('../utils')
 const { getToken } = require('../middlewares/loginCheck')
@@ -9,8 +9,7 @@ const {
   registerUserNameNotExistInfo,
   registerUserNameExistInfo,
   changePasswordFailInfo,
-  changePasswordInfo,
-  logoutInfo
+  changePasswordInfo
 } = require('../conf/ErrorInfo')
 
 /**
@@ -65,10 +64,25 @@ async function login (ctx, userName, password) {
   }
   let token
   if (userInfo) {
-    token = jwt.sign(userInfo, SECRET, { expiresIn: '1h' })
+    token = jwt.sign(userInfo, SECRET, { expiresIn: EXPIRES_IN })
   }
-  ctx.session.token = token
   return new SuccessModel({ token }, '登录成功')
+}
+
+/**
+ * 获取用户信息
+ * @param ctx 上下文
+ * @param next
+ * @returns {Promise<void>}
+ */
+async function getUerInfo (ctx, next) {
+  let { userName } = await getToken(ctx)
+  const userInfo = await getUserInfo(userName)
+  if (userInfo) {
+    return new SuccessModel(userInfo)
+  } else {
+    return new ErrorModel('获取失败')
+  }
 }
 
 /**
@@ -104,21 +118,12 @@ async function changePassword (ctx, params) {
   }
 }
 
-/**
- * 退出登录
- * @param ctx 上下文
- * @returns {Promise<*>}
- */
-async function logout (ctx) {
-  // 清楚token
-  return SuccessModel(logoutInfo)
-}
 
 module.exports = {
   isExist,
   register,
   login,
+  getUerInfo,
   changeInfo,
-  changePassword,
-  logout
+  changePassword
 }
