@@ -33,7 +33,7 @@ const PathWrite = [
 ]
 
 // 校验token以及是否过期
- app.use(async (ctx, next) => {
+app.use(async (ctx, next) => {
   return next().catch((err) => {
     if (err.status === 401) {
       let nowTime = new Date().getTime()
@@ -67,7 +67,7 @@ app.use(async (ctx, next) => {
 })
 
 // session配置
-/*app.keys = [SESSION_KEY]
+/* app.keys = [SESSION_KEY]
 app.use(session({
   key: 'token', // cookie name
   prefix: 'token', // redis key前缀
@@ -79,7 +79,7 @@ app.use(session({
   store: redisStore({
     all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
   })
-}))*/
+})) */
 
 // routes
 app.use(index.routes(), index.allowedMethods())
