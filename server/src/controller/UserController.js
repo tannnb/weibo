@@ -118,6 +118,7 @@ async function changePassword (ctx, params) {
   }
 }
 
+
 module.exports = {
   isExist,
   register,

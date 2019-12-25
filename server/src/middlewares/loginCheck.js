@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const verify = util.promisify(jwt.verify)
 const { ErrorModel } = require('../utils')
 const { SECRET } = require('../conf/constants')
-const {tokenExpireInfo,tokenFailInfo} = require('../conf/ErrorInfo')
+const { tokenExpireInfo, tokenFailInfo } = require('../conf/ErrorInfo')
 
 /**
  * token并解析用户数据
