@@ -88,6 +88,23 @@ const SCHEMA = {
   }
 }
 
+const BLOG_SCHEMA = {
+  type: 'object',
+  properties: {
+    content: {
+      type: 'string',
+      required: '123'
+    },
+    image: {
+      type: 'string',
+      maxLength: 255,
+      errorMessage: {
+        maxLength: '长度不超过255个字符'
+      }
+    }
+  }
+}
+
 /**
  * json schema校验
  * @param schema json schema规则
@@ -111,6 +128,16 @@ function useValidator (data = {}) {
   return validator(SCHEMA, data)
 }
 
+/**
+ * 创建博客
+ * @param data
+ * @returns {ajv.ErrorObject}
+ */
+function blogValidator (data = {}) {
+  return validator(BLOG_SCHEMA, data)
+}
+
 module.exports = {
-  useValidator
+  useValidator,
+  blogValidator
 }
