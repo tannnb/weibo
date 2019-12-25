@@ -12,6 +12,7 @@ module.exports = {
   tokenFailInfo: '暂无访问权限',
   changePasswordFailInfo: '密码修改失败',
   changePasswordInfo: '密码修改成功',
-  logoutInfo:'退出登录成功',
-  uploadFileSizeFailInfo: '文件上传体积过大，图片最大为1M'
+  logoutInfo: '退出登录成功',
+  uploadFileSizeFailInfo: '文件上传体积过大，图片最大为1M',
+  createBlogFailInfo: '创建失败'
 }

@@ -15,5 +15,6 @@ User.hasMany(Blog, { foreignKey: 'userId' })
 
 module.exports = {
   User,
-  Chat
+  Chat,
+  Blog
 }

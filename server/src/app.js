@@ -18,6 +18,7 @@ const { tokenExpireInfo, tokenFailInfo } = require('./conf/ErrorInfo')
 const index = require('./routes/index')
 const userApiRouter = require('./routes/user')
 const utilsApiRouter = require('./routes/utils')
+const blogApiRouter = require('./routes/blog')
 const { ErrorModel } = require('./utils')
 const { connectSocket } = require('./io')
 
@@ -33,7 +34,7 @@ const PathWrite = [
 ]
 
 // 校验token以及是否过期
- app.use(async (ctx, next) => {
+app.use(async (ctx, next) => {
   return next().catch((err) => {
     if (err.status === 401) {
       let nowTime = new Date().getTime()
@@ -67,7 +68,7 @@ app.use(async (ctx, next) => {
 })
 
 // session配置
-/*app.keys = [SESSION_KEY]
+/* app.keys = [SESSION_KEY]
 app.use(session({
   key: 'token', // cookie name
   prefix: 'token', // redis key前缀
@@ -79,12 +80,13 @@ app.use(session({
   store: redisStore({
     all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
   })
-}))*/
+})) */
 
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
+app.use(blogApiRouter.routes(), blogApiRouter.allowedMethods())
 
 // 连接socket
 connectSocket(io)
