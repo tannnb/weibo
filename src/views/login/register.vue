@@ -1,6 +1,12 @@
 <template>
-  <div class="loginWrapper">
-    <van-row>
+  <div class="registerWrapper">
+    <van-nav-bar
+      title="用户注册"
+      left-text="返回"
+      left-arrow
+      @click-left="handleBack"
+    />
+    <van-row class="mainWrapper">
       <van-col span="22" offset="1">
         <van-cell-group>
           <van-field
@@ -23,7 +29,7 @@
             placeholder="请输入密码"
           />
         </van-cell-group>
-        <van-button type="primary" size="large" @click="handleLogin">注册</van-button>
+        <van-button class="registerButton" type="primary" size="large" @click="handleLogin">注册</van-button>
       </van-col>
     </van-row>
   </div>
@@ -55,6 +61,9 @@ export default {
     }, 500))
   },
   methods: {
+    handleBack () {
+      this.$router.replace('/login')
+    },
     handleClear () {
       this.checked = ''
       this.errorMessage = ''
@@ -78,8 +87,14 @@ export default {
         if (code === ERROR_NO) {
           this.$toast(message)
         }
+        if (code === SUCCESS_OK) {
+          this.$toast.success('注册成功')
+          setTimeout(() => {
+            this.handleBack()
+          }, 2000)
+        }
       }).catch(() => {
-
+        this.$toast.fail('网络异常，请稍后再试')
       })
     },
     _isExist (username) {
@@ -102,9 +117,15 @@ export default {
 </script>
 
 <style lang="scss">
-  .loginWrapper {
+  .registerWrapper {
     .van-field__right-icon {
       color: #07c160;
+    }
+    .van-nav-bar .van-icon,.van-nav-bar__text {
+      color: #b3b5b7;
+    }
+    .registerButton {
+      margin-top: 40px;
     }
   }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <div class="loginWrapper">
+    <van-nav-bar title="用户登录" />
     <van-row>
       <van-col span="22" offset="1">
         <van-cell-group>
@@ -8,11 +9,7 @@
             clearable
             label="用户名"
             left-icon="contact"
-            :right-icon="checked"
             placeholder="请输入用户名"
-            @clear="handleClear"
-            @blur="handleBlur"
-            :error-message="errorMessage"
           />
           <van-field
             v-model="password"
@@ -23,7 +20,7 @@
             placeholder="请输入密码"
           />
         </van-cell-group>
-        <div @click="handleRegister">立即注册</div>
+        <div class="registerButton" @click="handleRegister">立即注册>></div>
         <van-button type="primary" size="large" @click="handleLogin">注册</van-button>
       </van-col>
     </van-row>
@@ -39,35 +36,15 @@ export default {
   data () {
     return {
       username: '',
-      password: '',
-      errorMessage: '',
-      checked: ''
+      password: ''
     }
   },
   created () {},
 
   mounted () {
-    this.$watch('username', debounce((newQuery) => {
-      if (!newQuery) {
-        this.checked = ''
-        return
-      }
-      this._isExist(newQuery)
-    }, 500))
   },
   methods: {
-    handleClear () {
-      this.checked = ''
-      this.errorMessage = ''
-    },
-    handleBlur () {
-      if (!this.username) {
-        this.checked = ''
-        this.errorMessage = ''
-      }
-    },
     handleLogin () {
-      console.log('asd')
       if (!this.username || !this.password) {
         this.$dialog.alert({
           message: '用户名或密码不能为空!'
@@ -78,23 +55,15 @@ export default {
     },
     _isLogin (username, password) {
       isLogin(username, password).then(res => {
-        console.log('res', res)
+        const { code, data, message } = res
+        if (code !== SUCCESS_OK) {
+          this.$toast(message)
+          return
+        }
+        this.$router.replace('/')
+        console.log('data', data.token)
       }).catch(() => {
 
-      })
-    },
-    _isExist (username) {
-      this.checked = this.errorMessage = ''
-      isExist(username).then(res => {
-        const { code, message } = res
-        if (code === ERROR_NO) {
-          this.checked = 'checked'
-        }
-        if (code === SUCCESS_OK) {
-          this.errorMessage = message
-        }
-      }).catch(() => {
-        this.checked = this.errorMessage = ''
       })
     },
     handleRegister () {
@@ -109,6 +78,11 @@ export default {
 .loginWrapper {
   .van-field__right-icon {
     color: #07c160;
+  }
+  .registerButton {
+    margin: 20px 0;
+    text-align: right;
+    color: #a7a7a7;
   }
 }
 </style>
