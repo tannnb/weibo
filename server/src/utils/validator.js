@@ -92,8 +92,7 @@ const BLOG_SCHEMA = {
   type: 'object',
   properties: {
     content: {
-      type: 'string',
-      required: '123'
+      type: ['string','number']
     },
     image: {
       type: 'string',
