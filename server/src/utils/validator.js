@@ -92,7 +92,7 @@ const BLOG_SCHEMA = {
   type: 'object',
   properties: {
     content: {
-      type: ['string','number']
+      type: ['string', 'number']
     },
     image: {
       type: 'string',
@@ -100,6 +100,12 @@ const BLOG_SCHEMA = {
       errorMessage: {
         maxLength: '长度不超过255个字符'
       }
+    },
+    pageIndex: {
+      type: 'number'
+    },
+    pageSize: {
+      type: 'number'
     }
   }
 }

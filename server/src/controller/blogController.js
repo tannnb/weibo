@@ -1,7 +1,8 @@
 const xss = require('xss')
 const { SuccessModel, ErrorModel } = require('../utils')
 const { getToken } = require('../middlewares/loginCheck')
-const { createBlog } = require('../services/BlogServer')
+const { PAGEZ_SIZE } = require('../conf/constants')
+const { createBlog, getBlogListByUser } = require('../services/BlogServer')
 const { createBlogFailInfo } = require('../conf/ErrorInfo')
 
 /**
@@ -20,6 +21,26 @@ async function create (ctx, params) {
   }
 }
 
+/**
+ * <获取个人主页微博列表>
+ * @param userName
+ * @param pageIndex
+ * @param pageSize
+ * @returns {Promise<void>}
+ */
+async function getProfileBlogList (userName, pageIndex = 0, pageSize = PAGEZ_SIZE) {
+  let result = await getBlogListByUser({ userName, pageIndex, pageSize })
+  let blogList = result.blogList
+  return new SuccessModel({
+    blogList,
+    pageSize: PAGEZ_SIZE,
+    pageIndex,
+    total: result.total
+  })
+}
+
 module.exports = {
-  create
+  create,
+  getBlogListByUser,
+  getProfileBlogList
 }

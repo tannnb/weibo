@@ -1,5 +1,6 @@
 const crypto = require('crypto')
 const { DEFAULT_PICTURE, CRYPTO_SECRET_KEY } = require('../conf/constants')
+const dayJS = require('dayjs')
 
 /**
  * 用户默认头像设置
@@ -26,6 +27,10 @@ function formatUser (list) {
     return list.map(user => _formatUserPicture(user))
   }
   return _formatUserPicture(list)
+}
+
+function formatTime (time) {
+  return dayJS(time).format('YYYY-MM-DD HH:mm:ss')
 }
 
 /**
@@ -84,6 +89,7 @@ function doCrypto (content) {
 
 module.exports = {
   _formatUserPicture,
+  formatTime,
   formatUser,
   SuccessModel,
   ErrorModel,

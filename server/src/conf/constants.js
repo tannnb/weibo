@@ -7,5 +7,6 @@ module.exports = {
   CRYPTO_SECRET_KEY: 'kuasdasdbiub123',
   SECRET: '__tannnb__',
   DEFAULT_PICTURE: '',
-  EXPIRES_IN:'1h'
+  EXPIRES_IN: '1h',
+  PAGE_SIZE: 10
 }
