@@ -68,10 +68,10 @@ app.use(async (ctx, next) => {
 })
 
 // session配置
-/* app.keys = [SESSION_KEY]
+ app.keys = [SESSION_KEY]
 app.use(session({
-  key: 'token', // cookie name
-  prefix: 'token', // redis key前缀
+  key: 'weibo:', // cookie name
+  prefix: 'weibo:', // redis key前缀
   cookie: {
     path: '/',
     httpOnly: true,
@@ -80,7 +80,7 @@ app.use(session({
   store: redisStore({
     all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
   })
-})) */
+}))
 
 // routes
 app.use(index.routes(), index.allowedMethods())

@@ -1,7 +1,7 @@
 const xss = require('xss')
 const { SuccessModel, ErrorModel } = require('../utils')
 const { getToken } = require('../middlewares/loginCheck')
-const { PAGEZ_SIZE } = require('../conf/constants')
+const { PAGE_SIZE } = require('../conf/constants')
 const { createBlog, getBlogListByUser } = require('../services/BlogServer')
 const { createBlogFailInfo } = require('../conf/ErrorInfo')
 
@@ -28,12 +28,29 @@ async function create (ctx, params) {
  * @param pageSize
  * @returns {Promise<void>}
  */
-async function getProfileBlogList (userName, pageIndex = 0, pageSize = PAGEZ_SIZE) {
+async function getProfileBlogList (userName, pageIndex = 0, pageSize = PAGE_SIZE) {
   let result = await getBlogListByUser({ userName, pageIndex, pageSize })
   let blogList = result.blogList
   return new SuccessModel({
     blogList,
-    pageSize: PAGEZ_SIZE,
+    pageSize: PAGE_SIZE,
+    pageIndex,
+    total: result.total
+  })
+}
+
+/**
+ * <获取广场话题>
+ * @param pageIndex
+ * @param pageSize
+ * @returns {Promise<void>}
+ */
+async function getSquareList (pageIndex, pageSize) {
+  let result = await getBlogListByUser( {pageIndex, pageSize} )
+  let blogList = result.blogList
+  return new SuccessModel({
+    blogList,
+    pageSize: PAGE_SIZE,
     pageIndex,
     total: result.total
   })
@@ -42,5 +59,6 @@ async function getProfileBlogList (userName, pageIndex = 0, pageSize = PAGEZ_SIZ
 module.exports = {
   create,
   getBlogListByUser,
-  getProfileBlogList
+  getProfileBlogList,
+  getSquareList
 }
