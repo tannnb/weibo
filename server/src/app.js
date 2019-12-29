@@ -19,6 +19,7 @@ const index = require('./routes/index')
 const userApiRouter = require('./routes/user')
 const utilsApiRouter = require('./routes/utils')
 const blogApiRouter = require('./routes/blog')
+const followApiRouter = require('./routes/profile')
 const { ErrorModel } = require('./utils')
 const { connectSocket } = require('./io')
 
@@ -87,6 +88,7 @@ app.use(index.routes(), index.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
 app.use(blogApiRouter.routes(), blogApiRouter.allowedMethods())
+app.use(followApiRouter.routes(), followApiRouter.allowedMethods())
 
 // 连接socket
 connectSocket(io)

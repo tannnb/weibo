@@ -1,7 +1,5 @@
 const {get,set} = require('./_redis')
 const {getSquareList} = require('../controller/blogController')
-
-
 const KEY_PREFIX = 'weibo:square'
 /**
  * <获取广场列表缓存>
