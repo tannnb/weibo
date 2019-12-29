@@ -1,6 +1,6 @@
 const {  User,userRelation } = require('../db/model/index')
 const { formatUser, formatTime } = require('../utils/index')
-
+const {Op} = require('sequelize')
 
 /**
  * <获取关注该用户的用户列表，即该用户的粉丝>
@@ -17,13 +17,20 @@ async function getUserByFollower (followerId) {
       {
         model:userRelation,
         where:{
-          followerId
+          followerId,
+          userId: {
+              [Op.ne]: followerId,  // userId != followerId
+             // [Op.notIn]: followerId
+          }
         }
       }
     ]
   })
-  console.log('result',result)
   let userList = result.rows.map(row => row.dataValues)
+  userList.forEach(user => {
+    delete user.userrelations
+    return user
+  })
   userList = formatUser(userList)
   return {
     total:result.count,
