@@ -1,5 +1,5 @@
 const { SuccessModel, ErrorModel } = require('../utils')
-const {  getUserByFollower,addFollower } = require('../services/userRelationServer')
+const {  getUserByFollower,addFollower,getFollowerByUser } = require('../services/userRelationServer')
 
 /**
  * <根据userID获取用户列表>
@@ -16,7 +16,7 @@ async function getFans (userId) {
 }
 
 /**
- * <关注用户>
+ * <获取当前用户下的粉丝>
  * @param myUserId 当前用户id
  * @param currentId 要关注用户id
  * @returns {Promise<void>}
@@ -31,7 +31,23 @@ async function follow(myUserId,currentId) {
   }
 }
 
+
+/**
+ * <获取关注用户>
+ * @param userId
+ * @returns {Promise<ErrorModel|*|SuccessModel>}
+ */
+async function getFollowers(userId) {
+  const result = await getFollowerByUser(userId)
+  if(result) {
+    return new SuccessModel(result)
+  }else {
+    return new ErrorModel('获取失败')
+  }
+}
+
 module.exports = {
   getFans,
-  follow
+  follow,
+  getFollowers
 }
